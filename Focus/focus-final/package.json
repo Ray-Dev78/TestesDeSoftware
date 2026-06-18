@@ -1,0 +1,12 @@
+{
+  "name": "focus-estudos",
+  "version": "1.0.0",
+  "description": "Sistema de Organização de Estudos - IFPB Web II",
+  "scripts": {
+    "sass:watch": "sass scss/main.scss assets/css/main.css --watch --style=expanded",
+    "sass:build": "sass scss/main.scss assets/css/main.css --style=compressed --no-source-map"
+  },
+  "devDependencies": {
+    "sass": "^1.77.0"
+  }
+}

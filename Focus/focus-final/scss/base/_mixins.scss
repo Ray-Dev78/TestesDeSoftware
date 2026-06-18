@@ -1,0 +1,73 @@
+// ============================================================
+// scss/base/_mixins.scss
+// Mixins reutilizáveis — evitam repetição de código
+// ============================================================
+
+// Flexbox utilitários
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Card branco padrão
+@mixin card {
+  background: $branco;
+  border: 1px solid $cinza-bd;
+  border-radius: $raio-lg;
+  padding: 22px 24px;
+}
+
+// Botão verde padrão
+@mixin btn-verde($padding: 10px 22px) {
+  background: $verde;
+  color: $branco;
+  border: none;
+  border-radius: $raio;
+  padding: $padding;
+  font-family: $fonte;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+ 
+  &:hover {
+    background: $verde-dk;
+    transform: translateY(-1px);
+    color: $branco;
+    text-decoration: none;
+  }
+}
+
+// Badge / etiqueta colorida
+@mixin etiqueta {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 100px;
+  display: inline-block;
+  width: fit-content;
+}
+
+// Barra de progresso
+@mixin barra-prog($height: 12px) {
+  background: $cinza-bd;
+  border-radius: 100px;
+  height: $height;
+  overflow: hidden;
+}
+
+// Responsivo mobile
+@mixin mobile {
+  @media (max-width: #{$mobile}) { @content; }
+}
+ 
+// Responsivo tablet
+@mixin tablet {
+  @media (max-width: #{$tablet}) { @content; }
+}

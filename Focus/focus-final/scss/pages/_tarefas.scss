@@ -1,0 +1,306 @@
+// ============================================================
+// scss/pages/_tarefas.scss
+// Formulário, filtros, etiquetas e lista de tarefas
+// ============================================================
+
+// ── BLOCO DO FORMULÁRIO ──────────────────────────────────
+.bloco-form {
+  @include card;
+}
+ 
+.form-tarefa {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+ 
+.form-linha {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+ 
+  @include mobile { flex-direction: column; }
+}
+ 
+.campo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+ 
+  &.campo-pequeno { flex: 0 0 160px; }
+ 
+  label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: $cinza-dk;
+  }
+ 
+  input,
+  select {
+    border: 1.5px solid $cinza-bd;
+    border-radius: $raio;
+    padding: 10px 14px;
+    font-family: $fonte;
+    font-size: 0.88rem;
+    color: $preto;
+    background: $branco;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+ 
+    &::placeholder { color: #A0AEC0; }
+ 
+    &:focus {
+      border-color: $verde;
+      box-shadow: 0 0 0 3px rgba($verde, 0.12);
+    }
+  }
+ 
+  // campo fora (label de etiquetas)
+  &.campo-fora {
+    flex: 1;
+ 
+    label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: $cinza-dk;
+      margin-bottom: 6px;
+      display: block;
+    }
+  }
+ 
+  @include mobile { &.campo-pequeno { flex: 1; } }
+}
+
+// ── ETIQUETAS CHECKBOX ───────────────────────────────────
+.etiquetas-opcoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+ 
+.etiq-check {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+ 
+  input[type="checkbox"] { display: none; }
+ 
+  span {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 100px;
+    border: 1.5px solid transparent;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    user-select: none;
+ 
+    &:hover {
+      border-color: currentColor;
+      opacity: 0.85;
+    }
+  }
+ 
+  input:checked + span {
+    border-color: currentColor;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    transform: scale(1.05);
+  }
+}
+
+// ── BOTÃO ADICIONAR ──────────────────────────────────────
+.btn-adicionar {
+  @include btn-verde(11px 28px);
+  align-self: flex-start;
+  font-size: 0.88rem;
+}
+
+// ── FILTRO POR ETIQUETA ──────────────────────────────────
+.filtro-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+ 
+.filtro-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: $cinza-txt;
+  white-space: nowrap;
+}
+
+.filtro-etiqueta,
+.filtro-etiquetas {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+ 
+.filtro-btn {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 100px;
+  border: 1.5px solid $cinza-bd;
+  background: $branco;
+  color: $cinza-dk;
+  text-decoration: none;
+  transition: all 0.2s;
+  cursor: pointer;
+ 
+  &:hover { opacity: 0.8; text-decoration: none; }
+ 
+  &.ativo {
+    background: $verde;
+    color: $branco;
+    border-color: $verde;
+  }
+}
+
+// ── LISTA DE TAREFAS ─────────────────────────────────────
+.tarefas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+ 
+.tarefa-item {
+  background: $branco;
+  border: 1px solid $cinza-bd;
+  border-radius: $raio;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+ 
+  &:hover {
+    border-color: $verde-md;
+    box-shadow: $sombra;
+  }
+ 
+  &.concluida {
+    opacity: 0.65;
+    background: $cinza-cl;
+  }
+ 
+  @include mobile { flex-wrap: wrap; }
+}
+ 
+// Check
+.tarefa-check {
+  width: 20px;
+  height: 20px;
+  border: 2px solid $verde-md;
+  border-radius: 5px;
+  background: $verde-cl;
+  flex-shrink: 0;
+  @include flex-center;
+  font-size: 0.72rem;
+  color: $verde-dk;
+ 
+  &.ok {
+    background: $verde;
+    border-color: $verde;
+    color: $branco;
+  }
+}
+ 
+// Corpo
+.tarefa-corpo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+ 
+.tarefa-nome {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: $preto;
+ 
+  &.riscado {
+    text-decoration: line-through;
+    color: $cinza-txt;
+  }
+}
+ 
+// Etiquetas na tarefa
+.tarefa-etiqueta,
+.tarefa-etiquetas {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+ 
+.etiq-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 100px;
+}
+ 
+// Prioridade
+.prioridade {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 100px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+ 
+.prio-alta          { background: #EFF6FF; color: #1D4ED8; }
+.prio-intermediaria { background: #F5F3FF; color: #6D28D9; }
+.prio-baixa         { background: $verde-cl; color: $verde-dk; }
+ 
+// Ações
+.tarefa-acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+ 
+.btn-concluir {
+  background: $verde;
+  color: $branco;
+  border: none;
+  border-radius: 7px;
+  padding: 6px 14px;
+  font-family: $fonte;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+ 
+  &:hover { background: $verde-dk; }
+}
+ 
+.btn-excluir-tarefa {
+  background: none;
+  border: 1.5px solid $cinza-bd;
+  border-radius: 7px;
+  padding: 6px 10px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  color: $cinza-txt;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+ 
+  &:hover {
+    border-color: #EF4444;
+    color: #EF4444;
+    background: #FFF7F7;
+  }
+}
+ 
+.tag-concluida {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: $verde-dk;
+  background: $verde-cl;
+  padding: 4px 10px;
+  border-radius: 7px;
+}

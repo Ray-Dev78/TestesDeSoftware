@@ -1,0 +1,24 @@
+// ============================================================
+// scss/main.scss
+// Arquivo raiz — importa tudo na ordem correta
+//
+// COMO USAR:
+//   npm install
+//   npm run sass:watch   → desenvolvimento (observa mudanças)
+//   npm run sass:build   → produção (minificado)
+//
+// CSS gerado: assets/css/main.css
+// ============================================================
+
+// 1. Base: variáveis, mixins e reset
+@import 'base/variables';
+@import 'base/mixins';
+@import 'base/reset';
+
+// 2. Layout: header, sidebar, main
+@import 'layout/layout';
+
+// 3. Páginas
+@import 'pages/index';
+@import 'pages/dashboard';
+@import 'pages/tarefas';

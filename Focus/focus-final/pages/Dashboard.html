@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus - Dashboard</title>
+    
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS compilado do SASS -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+
+    <style>
+        /* Ajuste para alinhar usuário e botão sair lado a lado */
+        .header-direita {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .header-usuario {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body class="pagina-interna">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-logo">FOCUS</div>
+        <div class="header-centro">📚 Área do Estudante</div>
+        <div class="header-direita">
+            <div class="header-usuario">👤 Olá, Usuário</div>
+            <button class="btn-sair" onclick="window.location.href='index.html'">SAIR</button>
+        </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-titulo">📋 Menu Principal</div>
+        <a href="Dashboard.html" class="nav-item ativo">
+            <span class="icone">🏠</span> Dashboard
+        </a>
+        <a href="Tarefas.html" class="nav-item">
+            <span class="icone">📝</span> Minhas Tarefas
+        </a>
+        <a href="index.html" class="nav-item nav-sair-item">
+            <span class="icone">🚪</span> Sair
+        </a>
+    </aside>
+
+    <!-- MAIN - SÓ PROGRESSO E GRÁFICOS -->
+    <main class="main">
+
+        <div class="main-topo">
+            <div class="boas-vindas">
+                <h2>Bem-vindo(a) de volta!</h2>
+                <p>Acompanhe seu progresso de estudos</p>
+            </div>
+        </div>
+
+        <!-- CIRCULOS DE PROGRESSO -->
+        <div class="progresso-grid" id="stats-resumo">
+            <!-- Os cards de progresso serão carregados aqui via JS -->
+            <div class="prog-card verde">
+                <div class="num" id="total-concluidas">0</div>
+                <div class="desc">Tarefas Concluidas esta semana</div>
+            </div>
+
+            <div class="prog-card laranja">
+                <div class="num" id="tarefas-hoje">0</div>
+                <div class="desc">Tarefas para hoje</div>
+            </div>
+
+            <div class="prog-card vermelho">
+                <div class="num" id="tarefas-atrasadas">0</div>
+                <div class="desc">Tarefas atrasadas</div>
+            </div>
+        </div>
+
+        <!-- BARRA DE PROGRESSO GERAL -->
+        <div class="bloco">
+            <div class="bloco-titulo">📈 Progresso Geral da Semana</div>
+            <div class="barra-lateral">
+                <span>Tarefas concluídas</span>
+                <span class="barra-pct" id="progresso-geral-pct">0%</span>
+            </div>
+            <div class="barra-bg">
+                <div class="barra-fill" id="progresso-geral-fill" style="width:0%;"></div>
+            </div>
+            <div class="barra-legenda" id="progresso-geral-legenda"> 0 de 0 tarefas concluídas </div>
+        </div>
+
+        <!-- RESUMO POR ETIQUETA -->
+        <div class="bloco">
+            <div class="bloco-titulo">🏷️ Progresso por Etiqueta</div>
+            <div class="categorias-lista" id="categorias-container">
+                <!-- As categorias serão carregadas aqui via JS -->
+            </div>
+        </div>
+
+        <!-- BOTÃO IR PARA TAREFA -->
+        <a href="Tarefas.html" class="btn-ver-tarefas">
+            📝 Ir para Minhas Tarefas →
+        </a>
+
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => loadDashboardStats());
+
+        async function loadDashboardStats(){
+            try{
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                
+                // Atualizar cards de resumo
+                document.getElementById('total-concluidas').innerText = data.resumo.totalConcluidasSemana;
+                document.getElementById('tarefas-hoje').innerText = data.resumo.tarefasParaHoje;
+                document.getElementById('tarefas-atrasadas').innerText = data.resumo.tarefasAtrasadas;
+
+                // Atualizar barra de progresso geral
+                const pctGeral = data.resumo.progressoGeral;
+                document.getElementById('progresso-geral-pct').innerText = `${pctGeral}%`;
+                document.getElementById('progresso-geral-fill').style.width = `${pctGeral}%`;
+                document.getElementById('progresso-geral-legenda').innerText = 
+                    `${data.resumo.totalConcluidasSemana} de ${data.resumo.totalTarefas} tarefas concluídas`;
+
+                // Atualizar categorias por etiqueta
+                const container = document.getElementById('categorias-container');
+                const labels = {
+                    'matematica': { name: 'Matemática', bg: '#EFF6FF', color: '#1D4ED8', fill: '#3B82F6' },
+                    'portugues': { name: 'Português', bg: '#F0FDF4', color: '#15803D', fill: '#22C55E' },
+                    'fisica': { name: 'Física', bg: '#FEF3C7', color: '#92400E', fill: '#F59E0B' },
+                    'webii': { name: 'Web II', bg: '#FFF1F2', color: '#BE123C', fill: '#F43F5E' },
+                    'ingles': { name: 'Inglês', bg: '#F5F3FF', color: '#6D28D9', fill: '#8B5CF6' },
+                    'geografia': { name: 'Geografia', bg: '#e7ff0e71', color: '#45c909', fill: '#22C55E' }
+                };
+
+                if (Object.keys(data.detalhePorEtiqueta).length === 0) {
+                    container.innerHTML = '<p class="text-muted">Nenhuma tarefa cadastrada ainda.</p>';
+                    return;
+                }
+
+                container.innerHTML = Object.entries(data.detalhePorEtiqueta).map(([tag, stats]) => {
+                    const style = labels[tag] || { name: tag, bg: '#eee', color: '#666', fill: '#999' };
+                    return `
+                        <div class="categoria-item">
+                            <div class="cat-info">
+                                <span class="cat-etiqueta" style="background:${style.bg}; color:${style.color}">${style.name}</span>
+                                <span class="cat-desc">${stats.total} tarefas · ${stats.concluidas} concluídas</span>
+                            </div>
+                            <div class="cat-barra-bg">
+                                <div class="cat-barra-fill" style="width:${stats.porcentagem}%; background:${style.fill}"></div>
+                            </div>
+                            <span class="cat-pct">${stats.porcentagem}%</span>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (err) {
+                console.error('Erro ao carregar estatísticas do dashboard:', err);
+            }
+        }
+    </script>
+</body>
+</html>

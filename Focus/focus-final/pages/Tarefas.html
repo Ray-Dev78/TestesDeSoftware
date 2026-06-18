@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus - Minhas Tarefas</title>
+    
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS compilado do SASS -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+
+    <style>
+        /* Ajuste para alinhar usuário e botão sair lado a lado */
+        .header-direita {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .header-usuario {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body class="pagina-interna">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-logo">FOCUS</div>
+        <div class="header-centro">📚 Área do Estudante</div>
+        <div class="header-direita">
+            <div class="header-usuario">👤 Olá, Usuário</div>
+            <button class="btn-sair" onclick="window.location.href='index.html'">SAIR</button>
+        </div>
+    </header>
+    
+    <!-- CONTEÚDO PRINCIPAL ( SIDEBAR ) -->
+    <aside class="sidebar">
+        <div class="sidebar-titulo">Menu Principal</div>
+        <a href="Dashboard.html" class="nav-item">
+            <span class="icone">🏠</span> Dashboard
+        </a>
+        <a href="Tarefas.html" class="nav-item ativo">
+            <span class="icone">📝</span> Minhas Tarefas
+        </a>
+        <a href="index.html" class="nav-item vav-sair-item">
+            <span class="icone">🚪</span> Sair
+        </a>
+    </aside>
+
+    <!-- MAIN - TARAFAS + ETIQUETAS -->
+    <main class="main">
+        
+        <!-- TOPO : TITULO -->
+        <div class="topo-main">
+            <div class="boas-vindas">
+                <h2>Minhas Tarefas</h2>
+                <p>Gerencie, organize e adicione etiquetas às suas tarefas</p>
+            </div>
+        </div>
+
+        <!-- FORMULARIO: ADICIONAR NOVA TAREFA -->
+        <div class="bloco-form">
+            <div class="bloco-titulo">➕ Nova Tarefa</div>
+
+            <form action="#" method="post" class="form-tarefa">
+
+                <div class="form-linha">
+                    <div class="campo-form">
+                        <label for="name-tarefa">Nome da tarefa</label>
+                        <input type="text" id="nome-tarefa" name="titulo"
+                        placeholder="Ex: Revisar matemática" required/>
+                    </div>
+
+                    <div class="campo-form campo-pequeno">
+                        <label for="prioridade">Prioridade</label>
+                        <select name="prioridade" id="prioridade">
+                            <option value="alta">Alta</option>
+                            <option value="intermediaria" selected>Intermediária</option>
+                            <option value="baixa">Baixa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-linha">
+                    <div class="campo-form">
+                        <label for="etiqueta-input">Etiquetas (separadas por vírgula)</label>
+                        <input type="text" id="etiqueta-input" name="etiqueta" 
+                        placeholder="Ex: Matemática, Prova, Importante"/>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-adicionar">Adicionar Tarefa</button>
+
+            </form>
+        </div>
+
+        <!-- FILTRO POR ETIQUETA -->
+        <div class="filtro-wrap">
+            <span class="filtro-label">Filtrar por etiqueta:</span>
+            <div class="filtro-etiqueta" id="filtros-container">
+                <a href="#" class="filtro-btn ativo">Todas</a>
+                <!-- Filtros dinâmicos aparecerão aqui -->
+            </div>
+        </div>
+
+        <!-- LISTA DE TAREFAS -->
+        <div class="secao-titulo"> 📋 Lista de Tarefas</div>
+
+        <div class="tarefas-lista" id="tarefas-container">
+            <!-- As tarefas serão carregadas aqui via JavaScript -->
+        </div>
+
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const formTarefa = document.querySelector('.form-tarefa');
+        const containerTarefas = document.getElementById('tarefas-container');
+        const containerFiltros = document.getElementById('filtros-container');
+        let currentFilter = 'Todas';
+
+        // Carregar tarefas ao iniciar
+        document.addEventListener('DOMContentLoaded', () => loadTasks());
+
+        // Lógica de adicionar tarefa
+        formTarefa.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(formTarefa);
+            
+            // Transformar string de etiquetas em array, removendo espaços e vazios
+            const etiquetasString = formData.get('etiqueta') || '';
+            const etiquetas = etiquetasString.split(',')
+                .map(s => s.trim())
+                .filter(s => s !== '');
+
+            const data = {
+                titulo: formData.get('titulo'),
+                prioridade: formData.get('prioridade'),
+                etiqueta: etiquetas
+            };
+
+            try {
+                const response = await fetch('/api/tasks', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (response.ok) {
+                    formTarefa.reset();
+                    loadTasks();
+                }
+            } catch (err) {
+                console.error('Erro ao adicionar tarefa:', err);
+            }
+        });
+
+        async function loadTasks() {
+            try {
+                const response = await fetch('/api/tasks');
+                let tasks = await response.json();
+
+                // Atualizar filtros dinâmicos
+                updateFilters(tasks);
+
+                // Aplicar filtro atual
+                if (currentFilter !== 'Todas') {
+                    tasks = tasks.filter(t => t.tags.some(tag => tag.toLowerCase() === currentFilter.toLowerCase()));
+                }
+
+                renderTasks(tasks);
+            } catch (err) {
+                console.error('Erro ao carregar tarefas:', err);
+            }
+        }
+
+        function updateFilters(tasks) {
+            const allTags = new Set();
+            tasks.forEach(t => t.tags.forEach(tag => allTags.add(tag)));
+
+            const activeClass = currentFilter === 'Todas' ? 'ativo' : '';
+            let html = `<a href="#" class="filtro-btn ${activeClass}" onclick="applyFilter('Todas')">Todas</a>`;
+            
+            Array.from(allTags).sort().forEach(tag => {
+                const isActive = currentFilter.toLowerCase() === tag.toLowerCase() ? 'ativo' : '';
+                html += `<a href="#" class="filtro-btn ${isActive}" style="${getTagStyle(tag)}" onclick="applyFilter('${tag}')">${tag}</a>`;
+            });
+
+            containerFiltros.innerHTML = html;
+        }
+
+        function applyFilter(tag) {
+            currentFilter = tag;
+            loadTasks();
+        }
+
+        function renderTasks(tasks) {
+            if (tasks.length === 0) {
+                containerTarefas.innerHTML = '<p class="text-center p-4 text-muted">Nenhuma tarefa encontrada.</p>';
+                return;
+            }
+
+            containerTarefas.innerHTML = tasks.map(task => `
+                <div class="tarefa-item">
+                    <div class="tarefa-check">${task.status === 'concluida' ? '✓' : ''}</div>
+                    <div class="tarefa-corpo">
+                        <div class="tarefa-nome ${task.status === 'concluida' ? 'riscado' : ''}">${task.title}</div>
+                        <div class="tarefa-etiquetas">
+                            ${task.tags.map(tag => `
+                                <span class="etiq-badge" style="${getTagStyle(tag)}">${tag}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <span class="prioridade prio-${task.priority.toLowerCase()}">${task.priority.toUpperCase()}</span>
+                    <div class="tarefa-acoes">
+                        ${task.status === 'pendente' 
+                            ? `<button class="btn-concluir" onclick="updateTaskStatus(${task.id}, 'concluida')">Concluir</button>`
+                            : '<span class="tag-concluida">✅ Concluída</span>'
+                        }
+                        <button class="btn-excluir-tarefa" onclick="deleteTask(${task.id})">🗑</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function updateTaskStatus(id, status) {
+            try {
+                await fetch(`/api/tasks/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status })
+                });
+                loadTasks();
+            } catch (err) {
+                console.error('Erro ao atualizar tarefa:', err);
+            }
+        }
+
+        async function deleteTask(id) {
+            if (confirm('Deseja excluir esta tarefa?')) {
+                try {
+                    await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+                    loadTasks();
+                } catch (err) {
+                    console.error('Erro ao excluir tarefa:', err);
+                }
+            }
+        }
+
+        // Estilos dinâmicos para etiquetas baseados em cores agradáveis
+        function getTagStyle(tag) {
+            const tagLower = tag.toLowerCase();
+            const colors = [
+                { bg: '#EFF6FF', color: '#1D4ED8', border: '#BFDBFE' }, // Azul
+                { bg: '#F0FDF4', color: '#15803D', border: '#86EFAC' }, // Verde
+                { bg: '#FEF3C7', color: '#92400E', border: '#FDE68A' }, // Amarelo
+                { bg: '#FFF1F2', color: '#BE123C', border: '#FECDD3' }, // Rosa
+                { bg: '#F5F3FF', color: '#6D28D9', border: '#DDD6FE' }, // Roxo
+                { bg: '#F0FDFA', color: '#0F766E', border: '#99F6E4' }  // Teal
+            ];
+
+            // Gera um índice baseado no nome da tag para manter a cor consistente
+            let hash = 0;
+            for (let i = 0; i < tagLower.length; i++) {
+                hash = tagLower.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const index = Math.abs(hash) % colors.length;
+            const style = colors[index];
+
+            return `background:${style.bg}; color:${style.color}; border: 1px solid ${style.border}`;
+        }
+    </script>
+</body>
+</html>

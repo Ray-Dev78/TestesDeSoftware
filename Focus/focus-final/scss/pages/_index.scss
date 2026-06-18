@@ -1,0 +1,476 @@
+// ============================================================
+// scss/pages/_index.scss
+// Landing page (index.html) + seção de Login e Cadastro
+// ============================================================
+
+// ── NAV ──────────────────────────────────────────────────
+.nav {
+  @include flex-between;
+  padding: 0 40px;
+  height: 64px;
+  background: $branco;
+  border-bottom: 1px solid $cinza-bd;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+ 
+  &-logo {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: $preto;
+    letter-spacing: -0.02em;
+ 
+    span { color: $verde; }
+  }
+ 
+  &-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+ 
+    a {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: $cinza-txt;
+      transition: color 0.2s;
+ 
+      &:hover { color: $preto; }
+    }
+  }
+ 
+  &-btn {
+    background: $verde;
+    color: $branco !important;
+    padding: 9px 22px;
+    border-radius: $raio;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    transition: background 0.2s !important;
+ 
+    &:hover {
+      background: $verde-dk !important;
+      color: $branco !important;
+    }
+  }
+ 
+  @include mobile {
+    padding: 0 20px;
+    &-links a:not(.nav-btn) { display: none; }
+  }
+}
+
+// ── HERO ─────────────────────────────────────────────────
+.hero {
+  background: $verde;
+  padding: 80px 48px;
+  text-align: center;
+ 
+  &-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    color: $branco;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 5px 16px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+  }
+ 
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    color: $branco;
+    line-height: 1.15;
+    max-width: 680px;
+    margin: 0 auto 18px;
+  }
+ 
+  p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    max-width: 460px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+  }
+ 
+  &-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+ 
+  @include mobile { padding: 60px 20px; }
+}
+ 
+.btn-branco {
+  background: $branco;
+  color: $verde-dk;
+  padding: 12px 30px;
+  border-radius: $raio;
+  font-weight: 700;
+  font-size: 0.92rem;
+  transition: background 0.2s, transform 0.15s;
+ 
+  &:hover { background: $verde-cl; transform: translateY(-1px); }
+}
+ 
+.btn-outline-branco {
+  background: transparent;
+  color: $branco;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  padding: 12px 30px;
+  border-radius: $raio;
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: border-color 0.2s, background 0.2s;
+ 
+  &:hover {
+    border-color: $branco;
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+// ── STATS BAR ────────────────────────────────────────────
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background: $verde-dk;
+ 
+  .stat {
+    flex: 1;
+    min-width: 150px;
+    text-align: center;
+    padding: 28px 16px;
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+ 
+    &:last-child { border-right: none; }
+ 
+    &-num {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: $branco;
+    }
+ 
+    &-desc {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 2px;
+    }
+  }
+}
+
+// ── SEÇÕES GENÉRICAS ─────────────────────────────────────
+.secao {
+  padding: 72px 48px;
+ 
+  &-cinza { background: $cinza-cl; }
+ 
+  &-topo {
+    text-align: center;
+    margin-bottom: 48px;
+ 
+    h2 {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 800;
+      color: $preto;
+      line-height: 1.2;
+    }
+ 
+    p {
+      color: $cinza-txt;
+      max-width: 440px;
+      margin: 10px auto 0;
+      font-size: 0.9rem;
+    }
+  }
+ 
+  &-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $verde-dk;
+    background: $verde-cl;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 12px;
+  }
+ 
+  @include mobile { padding: 52px 20px; }
+}
+
+// ── CARDS DE FUNCIONALIDADES ─────────────────────────────
+// Corrigido: era 'grif-func' no HTML original (typo)
+.grid-func,
+.grif-func {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+ 
+.func-card {
+  @include card;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+ 
+  &:hover {
+    border-color: $verde-md;
+    box-shadow: $sombra;
+    transform: translateY(-3px);
+  }
+ 
+  .func-icone {
+    font-size: 1.5rem;
+    margin-bottom: 14px;
+  }
+ 
+  h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: $preto;
+    margin-bottom: 6px;
+  }
+ 
+  p {
+    font-size: 0.82rem;
+    color: $cinza-txt;
+    line-height: 1.6;
+  }
+}
+
+// ── PASSOS ───────────────────────────────────────────────
+.passos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 28px;
+}
+ 
+.passo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+ 
+  &-num {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: $verde-md;
+    line-height: 1;
+  }
+ 
+  h3 {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: $preto;
+  }
+ 
+  p {
+    font-size: 0.82rem;
+    color: $cinza-txt;
+    line-height: 1.6;
+  }
+}
+
+// ── SEÇÃO AUTH (Login/Cadastro) ───────────────────────────
+.auth-secao {
+  padding: 72px 48px;
+  background: $cinza-cl;
+ 
+  .secao-topo { margin-bottom: 36px; }
+ 
+  @include mobile { padding: 52px 20px; }
+}
+
+// ── AUTH CARD ────────────────────────────────────────────
+.auth-card {
+  max-width: 520px;
+  margin: 0 auto;
+  background: $branco;
+  border: 1px solid $cinza-bd;
+  border-radius: $raio-lg;
+  padding: 36px;
+  box-shadow: $sombra;
+ 
+  @include mobile { padding: 24px 20px; }
+}
+
+// ── ABAS SEM JAVASCRIPT ───────────────────────────────────
+// Radios ficam DENTRO do .auth-card, antes das .abas e .form-bloco
+// Seletor ~ funciona pois são irmãos diretos
+.aba-radio { display: none; }
+
+.abas {
+  display: flex;
+  gap: 6px;
+  background: $cinza-cl;
+  border-radius: $raio;
+  padding: 5px;
+  margin-bottom: 32px;
+}
+ 
+.aba-label {
+  flex: 1;
+  text-align: center;
+  padding: 9px;
+  border-radius: 7px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: $cinza-txt;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+ 
+  &:hover { color: $preto; }
+}
+ 
+// Aba ativa
+#aba-login:checked ~ .abas .aba-label[for="aba-login"],
+#aba-cad:checked   ~ .abas .aba-label[for="aba-cad"] {
+  background: $verde;
+  color: $branco;
+  box-shadow: 0 2px 8px rgba($verde, 0.3);
+}
+
+// Formulários ocultos por padrão
+.form-bloco {
+  display: none;
+  flex-direction: column;
+  gap: 0;
+}
+ 
+// Mostrar form correto
+#aba-login:checked ~ .form-login { display: flex; }
+#aba-cad:checked   ~ .form-cad   { display: flex; }
+ 
+.form-titulo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: $preto;
+  margin-bottom: 4px;
+}
+ 
+.form-sub {
+  font-size: 0.83rem;
+  color: $cinza-txt;
+  margin-bottom: 24px;
+}
+
+// ── CAMPOS ───────────────────────────────────────────────
+.campo {
+  margin-bottom: 16px;
+ 
+  label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: $cinza-dk;
+    margin-bottom: 6px;
+  }
+ 
+  input {
+    width: 100%;
+    border: 1.5px solid $cinza-bd;
+    border-radius: $raio;
+    padding: 11px 14px;
+    font-family: $fonte;
+    font-size: 0.88rem;
+    color: $preto;
+    background: $branco;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+ 
+    &::placeholder { color: #A0AEC0; }
+ 
+    &:focus {
+      border-color: $verde;
+      box-shadow: 0 0 0 3px rgba($verde, 0.15);
+    }
+  }
+}
+ 
+// Campo admin
+.campo-admin {
+  background: #FFF7F7;
+  border: 1.5px solid #FECACA;
+  border-radius: $raio;
+  padding: 14px;
+  margin-bottom: 16px;
+ 
+  label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #DC2626;
+    margin-bottom: 6px;
+  }
+ 
+  input {
+    width: 100%;
+    border: 1.5px solid #FECACA;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: $fonte;
+    font-size: 0.88rem;
+    background: transparent;
+    outline: none;
+    transition: border-color 0.2s;
+ 
+    &:focus { border-color: #DC2626; }
+  }
+ 
+  .aviso {
+    font-size: 0.72rem;
+    color: #DC2626;
+    margin-top: 6px;
+  }
+}
+ 
+// Checkbox admin
+.check-adm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  cursor: pointer;
+ 
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: $verde;
+    flex-shrink: 0;
+  }
+ 
+  span {
+    font-size: 0.82rem;
+    color: $cinza-txt;
+    font-weight: 500;
+  }
+}
+ 
+// Botão submit
+.btn-submit {
+  @include btn-verde(13px 0);
+  width: 100%;
+  font-size: 0.92rem;
+  margin-top: 6px;
+}
+
+// ── RODAPÉ ───────────────────────────────────────────────
+.rodape {
+  @include flex-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-top: 1px solid $cinza-bd;
+  padding: 24px 48px;
+ 
+  p { font-size: 0.78rem; color: $cinza-txt; }
+  a { color: $verde; }
+ 
+  @include mobile {
+    padding: 20px;
+    flex-direction: column;
+    text-align: center;
+  }
+}

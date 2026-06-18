@@ -1,0 +1,34 @@
+// ============================================================
+// scss/base/_variables.scss
+// Tokens de design — substitui o :root do global.css
+// ============================================================
+
+// Paleta principal
+$verde:      #22C55E;
+$verde-dk:   #16A34A;
+$verde-cl:   #DCFCE7;
+$verde-md:   #86EFAC;
+ 
+$branco:     #FFFFFF;
+$cinza-cl:   #F8FAFC;
+$cinza-bd:   #E2E8F0;
+$cinza-txt:  #64748B;
+$cinza-dk:   #334155;
+$preto:      #0F172A;
+ 
+$laranja-cl: #FFF7ED;
+$vermelho-cl:#FFF1F2;
+ 
+// Layout
+$raio:       10px;
+$raio-lg:    16px;
+$sombra:     0 2px 16px rgba(0, 0, 0, 0.08);
+$sidebar-w:  200px;
+$header-h:   60px;
+ 
+// Tipografia
+$fonte:  'Inter', sans-serif;
+ 
+// Breakpoints
+$mobile:     680px;
+$tablet:     992px;

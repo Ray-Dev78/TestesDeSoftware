@@ -1,0 +1,174 @@
+// ============================================================
+// scss/layout/_layout.scss
+// Header, Sidebar e Main — telas internas (Dashboard/Tarefas)
+// ============================================================
+
+// ── BODY das páginas internas ────────────────────────────
+.pagina-interna {
+  display: flex;
+  min-height: 100vh;
+  background: $cinza-cl;
+}
+
+// ── HEADER ───────────────────────────────────────────────
+.header {
+  @include flex-between;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: $header-h;
+  background: $verde;
+  padding: 0 24px;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+ 
+  &-logo {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: $branco;
+    letter-spacing: -0.01em;
+  }
+ 
+  &-centro {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+ 
+  &-direita {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+ 
+  &-usuario {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 14px;
+    border-radius: 100px;
+  }
+}
+ 
+.btn-sair {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  color: $branco;
+  padding: 6px 16px;
+  border-radius: $raio;
+  font-family: $fonte;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+ 
+  &:hover { background: rgba(255, 255, 255, 0.28); }
+}
+
+// ── SIDEBAR ──────────────────────────────────────────────
+.sidebar {
+  width: $sidebar-w;
+  background: $branco;
+  border-right: 1px solid $cinza-bd;
+  padding-top: 76px;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 900;
+ 
+  &-titulo {
+    font-size: 0.67rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $cinza-txt;
+    padding: 14px 18px 10px;
+  }
+}
+ 
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 18px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: $cinza-dk;
+  border-left: 3px solid transparent;
+  text-decoration: none;
+  transition: all 0.2s;
+ 
+  .icone { font-size: 1rem; }
+ 
+  &:hover {
+    background: $verde-cl;
+    color: $verde-dk;
+    text-decoration: none;
+  }
+ 
+  &.ativo {
+    background: $verde-cl;
+    color: $verde-dk;
+    border-left-color: $verde;
+    font-weight: 700;
+  }
+ 
+  &.nav-sair-item {
+    margin-top: auto;
+    border-top: 1px solid $cinza-bd;
+    color: $cinza-txt;
+ 
+    &:hover { color: #DC2626; background: #FFF7F7; }
+  }
+}
+
+// ── MAIN ─────────────────────────────────────────────────
+.main {
+  margin-left: $sidebar-w;
+  margin-top: $header-h;
+  flex: 1;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+ 
+// Topo da página interna
+.topo-main,
+.main-topo {
+  @include flex-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+ 
+.boas-vindas {
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: $preto;
+  }
+  p {
+    font-size: 0.82rem;
+    color: $cinza-txt;
+    margin-top: 3px;
+  }
+}
+ 
+// Botão nova tarefa
+.btn-nova-tarefa {
+  @include btn-verde(10px 22px);
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+// ── RESPONSIVO ───────────────────────────────────────────
+@include mobile {
+  .sidebar { display: none; }
+  .main    { margin-left: 0; padding: 16px; }
+}
